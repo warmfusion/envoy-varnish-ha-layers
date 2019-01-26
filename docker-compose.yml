@@ -20,13 +20,17 @@ services:
             - uk-edge-varnish
         deploy:
             replicas: 2
+            labels:
+                - traefik.evha-envoy.port=80
+                - traefik.evha-envoy.frontend.rule=Host:evha.swarm.future.net.uk
+                - traefik.docker.network=traefik_network
             update_config:
                 parallelism: 1
                 delay: 20s
                 order: start-first
             placement:
                 constraints:
-                    - node.role == {{ role }}
+                    - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
 
@@ -52,7 +56,7 @@ services:
                 order: start-first
             placement:
                 constraints:
-                    - node.role == {{ role }}
+                    - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
 
@@ -79,7 +83,7 @@ services:
                 order: start-first
             placement:
                 constraints:
-                    - node.role == {{ role }}
+                    - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
 
@@ -104,7 +108,7 @@ services:
                 order: start-first
             placement:
                 constraints:
-                    - node.role == {{ role }}
+                    - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
 
@@ -128,6 +132,6 @@ services:
                 order: stop-first
             placement:
                 constraints:
-                    - node.role == {{ role }}
+                    - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
