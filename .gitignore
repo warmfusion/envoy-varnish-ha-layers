@@ -1,4 +1,5 @@
-^/conf.*/varnish/user.vcl
-/conf/*/varnish/*.vcl
+/conf/*/varnish/*
+
+!/conf/*/varnish/default.vcl
 
 .cache

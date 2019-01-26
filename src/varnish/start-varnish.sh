@@ -9,7 +9,7 @@ echo "Creating $1.vcl based on DNS results for $2"
 echo "Setting up look for updating configuration..."
 while /bin/true; do
   /opt/varnish/dns-to_backend.sh $1 $2 > /etc/varnish/$1.vcl
-  /usr/share/varnish/reload-vcl -q
+  /etc/init.d/varnish reload
   sleep 60
 done &
 
