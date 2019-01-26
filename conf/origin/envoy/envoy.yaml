@@ -31,7 +31,7 @@ static_resources:
     lb_policy: round_robin
     hosts:
       - socket_address:
-          address: uk-varnish-origin
+          address: uk-origin-varnish
           port_value: 6081
 
 admin:
