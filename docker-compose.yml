@@ -1,0 +1,83 @@
+version: "3"
+services:
+
+## uk based edge caches
+## Emulating the Datacenter operating out of London
+
+    uk-edge-envoy:
+        ports:
+            - '80:80'
+            - '443:443'
+            - '9901:9901'
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        image: envoyproxy/envoy:latest
+        volumes:
+          - ${PWD}/conf/edge/envoy:/etc/envoy
+    uk-edge-varnish:
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        image: 'warmfusion/varnish:5.2.1-1-stretch'
+        volumes:
+          - ${PWD}/conf/edge/varnish:/etc/varnish
+        command: ["varnishd", "-f", "/etc/varnish/user.vcl"]
+
+## us based edge cache
+## Emulating the Cloud based services out of the us
+
+    # us-edge-envoy:
+    #     ports:
+    #         - '1080:80'
+    #         - '1443:443'
+    #     restart: always
+    #     logging:
+    #         options:
+    #             max-size: 1g
+    #     image: envoyproxy/envoy:latest
+    # us-edge-varnish:
+    #     restart: always
+    #     logging:
+    #         options:
+    #             max-size: 1g
+    #     image: 'warmfusion/varnish:5.2.1-1-stretch'
+
+
+## uk based origin caches
+## Emulating the resilient caches acting as origin caches
+
+    uk-origin-envoy:
+        ports:
+            - '8080:80'
+            - '8443:443'
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        image: envoyproxy/envoy:latest
+        volumes:
+          - ${PWD}/conf/origin/envoy:/etc/envoy
+    # uk-origin-varnish:
+    #     restart: always
+    #     logging:
+    #         options:
+    #             max-size: 1g
+    #     image: 'warmfusion/varnish:5.2.1-1-stretch'
+
+
+## uk based origin backend service
+## Emulating the services delivering functionality
+
+
+    # uk-service:
+    #     ports:
+    #         - '9080:80'
+    #         - '9443:443'
+    #     restart: always
+    #     logging:
+    #         options:
+    #             max-size: 1g
+    #     image: envoyproxy/envoy:latest
