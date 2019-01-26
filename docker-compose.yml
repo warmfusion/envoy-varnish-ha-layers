@@ -30,7 +30,7 @@ services:
     uk-edge-varnish:
         restart: always
         image: docker.artifactory.futurenet.com/tjackson02/evha-edge-varnish:master
-        command: ["/opt/varnish/start-varnish.sh", "origin", "uk-origin-envoy"]
+        command: ["/opt/varnish/start-varnish.sh", "origin", "tjackson02-evha_uk-origin-envoy"]
         depends_on:
             - uk-origin-envoy
         deploy:
@@ -68,7 +68,7 @@ services:
     uk-origin-varnish:
         restart: always
         image: docker.artifactory.futurenet.com/tjackson02/evha-origin-varnish:master
-        command: ["/opt/varnish/start-varnish.sh", "service", "uk-service", "4567"]
+        command: ["/opt/varnish/start-varnish.sh", "service", "tjackson02-evha_uk-service", "4567"]
         depends_on:
             - uk-service
         deploy:
