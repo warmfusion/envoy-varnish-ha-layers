@@ -21,8 +21,8 @@ services:
 
     uk-edge-varnish:
         restart: always
-        ports:
-            - '81:6081'
+        # ports:
+        #     - '81:6081'
         logging:
             options:
                 max-size: 1g
@@ -58,8 +58,8 @@ services:
 ## Emulating the resilient caches acting as origin caches
 
     uk-origin-envoy:
-        ports:
-            - '8080:80'
+        # ports:
+        #     - '8080:80'
         restart: always
         logging:
             options:
@@ -72,8 +72,8 @@ services:
 
     uk-origin-varnish:
         restart: always
-        ports:
-            - '8081:6081'
+        # ports:
+        #     - '8081:6081'
         logging:
             options:
                 max-size: 1g

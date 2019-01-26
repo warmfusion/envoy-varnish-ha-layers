@@ -49,9 +49,9 @@ sub vcl_deliver {
 
     // override backend cache status with varnish status
     if (obj.hits > 0) {
-        set resp.http.X-WRM-Cache-Status = "HIT";
+        set resp.http.X-WRM-Origin-Status = "HIT";
     } else {
-        set resp.http.X-WRM-Cache-Status = "MISS";
+        set resp.http.X-WRM-Origin-Status = "MISS";
     }
 
     // tidy up headers
@@ -60,5 +60,5 @@ sub vcl_deliver {
     unset resp.http.Server;
 
     // Container identifier
-    set resp.http.X-Served-By = server.hostname;
+    set resp.http.X-WRM-Origin = server.hostname;
 }
