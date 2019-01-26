@@ -13,7 +13,7 @@ services:
         logging:
             options:
                 max-size: 1g
-        image: envoyproxy/envoy:latest
+        image: warmfusion/evhl-edge:latest
         volumes:
           - ${PWD}/conf/edge/envoy:/etc/envoy
         depends_on:
@@ -30,7 +30,6 @@ services:
         command: ["/opt/varnish/start-varnish.sh", "origin", "uk-origin-envoy"]
         volumes:
           - ${PWD}/conf/edge/varnish:/etc/varnish
-          - ${PWD}/src/varnish:/opt/varnish
         depends_on:
             - uk-origin-envoy
 
@@ -64,7 +63,7 @@ services:
         logging:
             options:
                 max-size: 1g
-        image: envoyproxy/envoy:latest
+        image: warmfusion/evhl-origin:latest
         volumes:
           - ${PWD}/conf/origin/envoy:/etc/envoy
         depends_on:
@@ -81,7 +80,6 @@ services:
         command: ["/opt/varnish/start-varnish.sh", "service", "uk-service", "4567"]
         volumes:
           - ${PWD}/conf/origin/varnish:/etc/varnish
-          - ${PWD}/src/varnish:/opt/varnish
         depends_on:
             - uk-service
 
@@ -90,7 +88,7 @@ services:
 
 
     uk-service:
-        build: src/service
+        image: warmfusion/evhl-test-app:latest
         ports:
             - '4567:4567'
         restart: always

@@ -21,3 +21,6 @@ RUN apt-get update && apt-get install -y \
         apt-get update && \
         apt-get install -y varnish-dev=$version varnish=$version && \
         rm -rf /var/lib/apt/lists/*
+
+
+COPY src/varnish /opt/varnish
