@@ -5,10 +5,10 @@ services:
 ## Emulating the Datacenter operating out of London
 
     uk-edge-envoy:
-        ports:
-            - '80:80'
-            - '443:443'
-            - '9901:9901'
+        # ports:
+        #     - '80:80'
+        #     - '443:443'
+        #     - '9901:9901'
         restart: always
         logging:
             options:
@@ -118,8 +118,8 @@ services:
 
     uk-service:
         image: warmfusion/evha-test-app:latest
-        ports:
-            - '4567:4567'
+        # ports:
+        #     - '4567:4567'
         restart: always
         logging:
             options:
