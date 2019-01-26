@@ -78,7 +78,7 @@ services:
             options:
                 max-size: 1g
         image: 'warmfusion/varnish:5.2.1-1-stretch'
-        command: ["/opt/varnish/start-varnish.sh", "service", "uk-service"]
+        command: ["/opt/varnish/start-varnish.sh", "service", "uk-service", "4567"]
         volumes:
           - ${PWD}/conf/origin/varnish:/etc/varnish
           - ${PWD}/src/varnish:/opt/varnish

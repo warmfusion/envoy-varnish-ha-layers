@@ -17,6 +17,8 @@ EOF
 
 IPS=$(python -c "import socket;print socket.getaddrinfo(\"$2\",'http')[0][4][0]")
 
+port=$3
+port=${port:-80} # Use 3rd arg if given as target port
 
 echo $IPS |awk '{print $NF}' |
 sort |
@@ -27,6 +29,7 @@ do
 	cat >>"$backend_file" <<-EOF
 	backend $be {
 	    .host = "$ip";
+	    .port = "$port";
 	}
 
 	EOF

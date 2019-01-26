@@ -1,12 +1,12 @@
 #!/bin/bash
 
 echo "Creating $1.vcl based on DNS results for $2"
-/opt/varnish/dns-to_backend.sh $1 $2 > /etc/varnish/$1.vcl
+/opt/varnish/dns-to_backend.sh $@ > /etc/varnish/$1.vcl
 
 
 echo "Setting up look for updating configuration..."
 while /bin/true; do
-  /opt/varnish/dns-to_backend.sh $1 $2 > /etc/varnish/$1.vcl
+  /opt/varnish/dns-to_backend.sh $@ > /etc/varnish/$1.vcl
   /usr/share/varnish/reload-vcl -q
   sleep 60
 done &
