@@ -6,9 +6,6 @@ services:
 
     uk-edge-envoy:
         restart: always
-        logging:
-            options:
-                max-size: 1g
         image: docker.artifactory.futurenet.com/tjackson02/evha-edge-envoy:master
         depends_on:
             - uk-edge-varnish
@@ -32,9 +29,6 @@ services:
 
     uk-edge-varnish:
         restart: always
-        logging:
-            options:
-                max-size: 1g
         image: docker.artifactory.futurenet.com/tjackson02/evha-edge-varnish:master
         command: ["/opt/varnish/start-varnish.sh", "origin", "uk-origin-envoy"]
         depends_on:
@@ -56,9 +50,6 @@ services:
 
     uk-origin-envoy:
         restart: always
-        logging:
-            options:
-                max-size: 1g
         image: docker.artifactory.futurenet.com/tjackson02/evha-origin-envoy:master
         depends_on:
             - uk-origin-varnish
@@ -76,9 +67,6 @@ services:
 
     uk-origin-varnish:
         restart: always
-        logging:
-            options:
-                max-size: 1g
         image: docker.artifactory.futurenet.com/tjackson02/evha-origin-varnish:master
         command: ["/opt/varnish/start-varnish.sh", "service", "uk-service", "4567"]
         depends_on:
@@ -102,9 +90,6 @@ services:
     uk-service:
         image: docker.artifactory.futurenet.com/tjackson02/evha-test-app:master
         restart: always
-        logging:
-            options:
-                max-size: 1g
         deploy:
             replicas: 1
             update_config:
