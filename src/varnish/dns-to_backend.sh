@@ -11,8 +11,14 @@ sub vcl_init {
     new $1 = directors.round_robin();
 EOF
 
-dig -t A +noquestion +nocomments +nostats +nocmd "$2" |
-awk '{print $NF}' |
+
+# dig -t A +noquestion +nocomments +nostats +nocmd "$2" |   # We don't have dig.. use getent
+# getent hosts $2 | awk '{ print $1 }' |
+
+IPS=$(python -c "import socket;print socket.getaddrinfo(\"$2\",'http')[0][4][0]")
+
+
+echo $IPS |awk '{print $NF}' |
 sort |
 while read ip
 do

@@ -4,17 +4,16 @@ vcl 4.0;
 import std;
 import directors;
 
-# // Backend definitions
+// Backend definitions
 # backend origin {
-#     .host = "uk-origin-envoy";
-#     .port = "80";
+#     .host = "uk-service";
+#     .port = "4567";
 # }
 
 // Generated dynamically using dns-to_backend.sh services uk-services
 // as can't rely on varnish to do dns lookups
 // https://info.varnish-software.com/blog/varnish-backends-in-the-cloud
-include "origin.vcl";
-
+include "services.vcl";
 
 sub vcl_recv {
 

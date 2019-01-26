@@ -25,9 +25,10 @@ services:
             options:
                 max-size: 1g
         image: 'warmfusion/varnish:5.2.1-1-stretch'
+        command: ["/opt/varnish/start-varnish.sh", "origin", "uk-origin-envoy"]
         volumes:
           - ${PWD}/conf/edge/varnish:/etc/varnish
-        command: ["varnishd", "-f", "/etc/varnish/user.vcl"]
+          - ${PWD}/src/varnish:/opt/varnish
         depends_on:
             - uk-origin-envoy
 
@@ -74,6 +75,10 @@ services:
             options:
                 max-size: 1g
         image: 'warmfusion/varnish:5.2.1-1-stretch'
+        command: ["/opt/varnish/start-varnish.sh", "services", "uk-services"]
+        volumes:
+          - ${PWD}/conf/origin/varnish:/etc/varnish
+          - ${PWD}/src/varnish:/opt/varnish
         depends_on:
             - uk-service
 
