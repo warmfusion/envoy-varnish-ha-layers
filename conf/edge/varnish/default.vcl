@@ -33,7 +33,7 @@ sub vcl_recv {
 
 sub choose_backend {
     # TODO; This would be a good place for magical routing trickery
-    set req.backend_hint = origin;
+    set req.backend_hint = origin.backend();
 }
 
 sub vcl_backend_response {

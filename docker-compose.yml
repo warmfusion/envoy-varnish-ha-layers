@@ -94,4 +94,3 @@ services:
         logging:
             options:
                 max-size: 1g
-        image: envoyproxy/envoy:latest
