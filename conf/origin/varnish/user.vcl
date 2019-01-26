@@ -13,7 +13,7 @@ import directors;
 // Generated dynamically using dns-to_backend.sh services uk-services
 // as can't rely on varnish to do dns lookups
 // https://info.varnish-software.com/blog/varnish-backends-in-the-cloud
-include "services.vcl";
+include "service.vcl";
 
 sub vcl_recv {
 
