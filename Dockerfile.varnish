@@ -3,8 +3,9 @@ FROM debian:stretch
 
 ARG http_proxy
 ARG version
+ARG mode
 
-LABEL name="Varnish development container"
+LABEL name="EVHA Varnish $mode container"
 LABEL version=$version
 
 # Install basic deps
@@ -24,3 +25,4 @@ RUN apt-get update && apt-get install -y \
 
 
 COPY src/varnish /opt/varnish
+COPY conf/$mode/varnish /etc/varnish

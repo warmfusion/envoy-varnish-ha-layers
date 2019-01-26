@@ -1,23 +1,19 @@
 version: "3.7"
 services:
 
-## uk based edge caches
+    ## uk based edge caches
 ## Emulating the Datacenter operating out of London
 
     uk-edge-envoy:
-        # ports:
-        #     - '80:80'
-        #     - '443:443'
-        #     - '9901:9901'
         restart: always
         logging:
             options:
                 max-size: 1g
-        image: warmfusion/evha-edge:latest
-        volumes:
-          - ${PWD}/conf/edge/envoy:/etc/envoy
+        image: docker.artifactory.futurenet.com/tjackson02/evha-edge-envoy:master
         depends_on:
             - uk-edge-varnish
+        networks:
+            - traefik_network
         deploy:
             replicas: 2
             labels:
@@ -34,18 +30,13 @@ services:
             restart_policy:
                 condition: any
 
-
     uk-edge-varnish:
         restart: always
-        # ports:
-        #     - '81:6081'
         logging:
             options:
                 max-size: 1g
-        image: 'warmfusion/varnish:5.2.1-1-stretch'
+        image: docker.artifactory.futurenet.com/tjackson02/evha-edge-varnish:master
         command: ["/opt/varnish/start-varnish.sh", "origin", "uk-origin-envoy"]
-        volumes:
-          - ${PWD}/conf/edge/varnish:/etc/varnish
         depends_on:
             - uk-origin-envoy
         deploy:
@@ -64,15 +55,11 @@ services:
 ## Emulating the resilient caches acting as origin caches
 
     uk-origin-envoy:
-        # ports:
-        #     - '8080:80'
         restart: always
         logging:
             options:
                 max-size: 1g
-        image: warmfusion/evha-origin:latest
-        volumes:
-          - ${PWD}/conf/origin/envoy:/etc/envoy
+        image: docker.artifactory.futurenet.com/tjackson02/evha-origin-envoy:master
         depends_on:
             - uk-origin-varnish
         deploy:
@@ -89,15 +76,11 @@ services:
 
     uk-origin-varnish:
         restart: always
-        # ports:
-        #     - '8081:6081'
         logging:
             options:
                 max-size: 1g
-        image: 'warmfusion/varnish:5.2.1-1-stretch'
+        image: docker.artifactory.futurenet.com/tjackson02/evha-origin-varnish:master
         command: ["/opt/varnish/start-varnish.sh", "service", "uk-service", "4567"]
-        volumes:
-          - ${PWD}/conf/origin/varnish:/etc/varnish
         depends_on:
             - uk-service
         deploy:
@@ -117,9 +100,7 @@ services:
 
 
     uk-service:
-        image: warmfusion/evha-test-app:latest
-        # ports:
-        #     - '4567:4567'
+        image: docker.artifactory.futurenet.com/tjackson02/evha-test-app:master
         restart: always
         logging:
             options:
@@ -135,3 +116,8 @@ services:
                     - node.role == worker # Mandatory line
             restart_policy:
                 condition: any
+
+networks:
+  traefik_network:
+    driver: overlay
+    external: true
