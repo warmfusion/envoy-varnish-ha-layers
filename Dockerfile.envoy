@@ -1,4 +1,4 @@
-FROM: envoyproxy/envoy:208a7fc72dd5f63fe1722111a248de4ce9224eab
+FROM envoyproxy/envoy:208a7fc72dd5f63fe1722111a248de4ce9224eab
 
 ARG mode
 

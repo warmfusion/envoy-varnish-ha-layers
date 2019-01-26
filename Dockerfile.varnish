@@ -1,28 +1,8 @@
-# docker build --build-arg version=5.2.1-1~stretch -f Dockerfile.varnish -t warmfusion/varnish:5.2.1-1-stretch .
-FROM debian:stretch
-
-ARG http_proxy
 ARG version
 ARG mode
 
-LABEL name="EVHA Varnish $mode container"
-LABEL version=$version
-
-# Install basic deps
-RUN apt-get update && apt-get install -y \
-        build-essential \
-        vim \
-        zip \
-        curl \
-        apt-transport-https && \
-        curl -s -L https://packagecloud.io/varnishcache/varnish5/gpgkey | apt-key add - && \
-        apt-get update && \
-        apt-get install debian-archive-keyring && \
-        echo "deb https://packagecloud.io/varnishcache/varnish5/debian/ stretch main\ndeb-src https://packagecloud.io/varnishcache/varnish5/debian/ stretch main" >>  /etc/apt/sources.list.d/varnishcache_varnish5.list && \
-        apt-get update && \
-        apt-get install -y varnish-dev=$version varnish=$version && \
-        rm -rf /var/lib/apt/lists/*
-
+FROM docker.artifactory.futurenet.com/tjackson02/varnish:$version
+LABEL name="Varnish $version - EVHA $mode container"
 
 COPY src/varnish /opt/varnish
 COPY conf/$mode/varnish /etc/varnish
