@@ -1,7 +1,8 @@
 ARG version
-ARG mode
 
 FROM docker.artifactory.futurenet.com/tjackson02/varnish:$version
+
+ARG mode
 LABEL name="Varnish $version - EVHA $mode container"
 
 COPY src/varnish /opt/varnish
