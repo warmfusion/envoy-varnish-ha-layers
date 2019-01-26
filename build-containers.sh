@@ -2,7 +2,17 @@
 
 
 VARNISH_VERSION=5.2.1-1~stretch
-IMAGE_TAG=${CI_BUILD_TAG:-latest}
+IMAGE_TAG=${CI_BUILD_TAG:-master}
+
+
+echo "Pulling copies of containers to reduce rebuild time"
+
+docker pull docker.artifactory.futurenet.com/tjackson02/evha-edge-varnish:${IMAGE_TAG}
+docker pull docker.artifactory.futurenet.com/tjackson02/evha-origin-varnish:${IMAGE_TAG}
+docker pull docker.artifactory.futurenet.com/tjackson02/evha-edge-envoy:${IMAGE_TAG}
+docker pull docker.artifactory.futurenet.com/tjackson02/evha-origin-envoy:${IMAGE_TAG}
+docker pull docker.artifactory.futurenet.com/tjackson02/evha-test-app:${IMAGE_TAG}
+
 
 echo "Building varnish container ..."
 docker build --build-arg version=${VARNISH_VERSION} --build-arg mode=edge -f Dockerfile.varnish -t docker.artifactory.futurenet.com/tjackson02/evha-edge-varnish:${IMAGE_TAG} .
