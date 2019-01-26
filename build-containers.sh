@@ -9,18 +9,18 @@ docker build --build-arg version=${VARNISH_VERSION} -f Dockerfile.varnish -t doc
 
 
 echo "Building envoy containers ..."
-docker build --build-arg mode=edge -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evhl-edge:${IMAGE_TAG} .
-docker build --build-arg mode=origin -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evhl-origin:${IMAGE_TAG} .
+docker build --build-arg mode=edge -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evha-edge:${IMAGE_TAG} .
+docker build --build-arg mode=origin -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evha-origin:${IMAGE_TAG} .
 
 echo "Building test-app container ..."
 cd  src/service
-docker build -t docker.artifactory.futurenet.com/tjackson02/evhl-test-app:${IMAGE_TAG} .
+docker build -t docker.artifactory.futurenet.com/tjackson02/evha-test-app:${IMAGE_TAG} .
 cd -
 
 
 echo "Pushing containers..."
 
 docker push docker.artifactory.futurenet.com/tjackson02/varnish:${VARNISH_VERSION}
-docker push docker.artifactory.futurenet.com/tjackson02/evhl-edge:${IMAGE_TAG}
-docker push docker.artifactory.futurenet.com/tjackson02/evhl-origin:${IMAGE_TAG}
-docker push docker.artifactory.futurenet.com/tjackson02/evhl-test-app:${IMAGE_TAG}
+docker push docker.artifactory.futurenet.com/tjackson02/evha-edge:${IMAGE_TAG}
+docker push docker.artifactory.futurenet.com/tjackson02/evha-origin:${IMAGE_TAG}
+docker push docker.artifactory.futurenet.com/tjackson02/evha-test-app:${IMAGE_TAG}

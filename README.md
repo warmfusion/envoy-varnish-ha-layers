@@ -1,4 +1,4 @@
-# envoy-varnish-ha-layer
+# envoy-varnish-ha-layer (EVHA)
 
 ## Goal
 

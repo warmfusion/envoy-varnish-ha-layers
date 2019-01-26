@@ -9,8 +9,6 @@ docker-build:
   script:
     - export CI_BUILD_TAG="${CI_BUILD_TAG:-$CI_BUILD_REF_SLUG}"
     - ./build-containers.sh
-  dependencies:
-    - build
   tags:
     - docker-builder
 
