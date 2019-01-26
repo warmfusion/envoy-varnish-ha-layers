@@ -16,6 +16,9 @@ services:
         image: envoyproxy/envoy:latest
         volumes:
           - ${PWD}/conf/edge/envoy:/etc/envoy
+        depends_on:
+            - uk-edge-varnish
+
     uk-edge-varnish:
         restart: always
         logging:
@@ -25,6 +28,8 @@ services:
         volumes:
           - ${PWD}/conf/edge/varnish:/etc/varnish
         command: ["varnishd", "-f", "/etc/varnish/user.vcl"]
+        depends_on:
+            - uk-origin-envoy
 
 ## us based edge cache
 ## Emulating the Cloud based services out of the us
@@ -60,24 +65,28 @@ services:
         image: envoyproxy/envoy:latest
         volumes:
           - ${PWD}/conf/origin/envoy:/etc/envoy
-    # uk-origin-varnish:
-    #     restart: always
-    #     logging:
-    #         options:
-    #             max-size: 1g
-    #     image: 'warmfusion/varnish:5.2.1-1-stretch'
+        depends_on:
+            - uk-origin-varnish
 
+    uk-origin-varnish:
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        image: 'warmfusion/varnish:5.2.1-1-stretch'
+        depends_on:
+            - uk-service
 
 ## uk based origin backend service
 ## Emulating the services delivering functionality
 
 
-    # uk-service:
-    #     ports:
-    #         - '9080:80'
-    #         - '9443:443'
-    #     restart: always
-    #     logging:
-    #         options:
-    #             max-size: 1g
-    #     image: envoyproxy/envoy:latest
+    uk-service:
+        build: src/service
+        ports:
+            - '4567:4567'
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        image: envoyproxy/envoy:latest

@@ -31,13 +31,8 @@ static_resources:
     lb_policy: round_robin
     hosts:
       - socket_address:
-          address: UK-varnish-edge
+          address: uk-varnish-origin
           port_value: 80
-    health_checks:
-      - http_health_check:
-          path: "/varnish-status"
-          service_name: "varnish"
-
 
 admin:
   access_log_path: /tmp/admin_access.log
