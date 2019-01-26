@@ -1,0 +1,22 @@
+---
+- hosts: core.swarm.deploy
+  vars:
+    domain: swarm.future.net.uk
+    project: evha
+  gather_facts: no
+# Standard config for any compose deployment
+  tasks:
+  - debug:
+        msg: "Deploying {{ project }}"
+  - name: "Ensure directory"
+    file:
+      path: /etc/compose-files/{{ project }}/
+      state: directory
+      # group: deploy
+  - name: "Copy compose file"
+    copy:
+      src: ../docker-compose.yml
+      dest: /etc/compose-files/{{ project }}/docker-compose-{{ project }}.yml
+      # group: deploy
+  - name: "Deploy stack"
+    command: /usr/bin/sudo /usr/bin/colt -c /etc/compose-files/{{ project }}/docker-compose-{{ project }}.yml {{ project }}

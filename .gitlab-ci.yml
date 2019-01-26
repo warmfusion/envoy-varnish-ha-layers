@@ -1,0 +1,32 @@
+stages:
+  - build
+  - deploy
+
+# Can't use make, it doesn't exist on the docker-builder server
+docker-build:
+  stage: build
+  before_script: []
+  script:
+    - export CI_BUILD_TAG="${CI_BUILD_TAG:-$CI_BUILD_REF_SLUG}"
+    - ./build-containers.sh
+  dependencies:
+    - build
+  tags:
+    - docker-builder
+
+
+
+install-to-swarm:
+  stage: deploy
+  image: docker.artifactory.futurenet.com/ansible:2.3.2.0
+  script:
+    - echo "${ANSIBLE_KEY_B64}" | base64 -d > id_rsa && chmod 600 id_rsa
+    - ansible-playbook ansible/deploy.yml
+        -i ansible/inventory/hosts.yml
+        -e project=${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+        -u ansible
+        --private-key id_rsa
+  tags:
+    - deploy
+  only:
+    - master

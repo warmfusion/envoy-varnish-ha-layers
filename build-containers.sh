@@ -1,15 +1,26 @@
 #!/bin/bash
 
 
+VARNISH_VERSION=5.2.1-1~stretch
+IMAGE_TAG=${CI_BUILD_TAG:-latest}
+
 echo "Building varnish container ..."
-docker build --build-arg version=5.2.1-1~stretch -f Dockerfile.varnish -t warmfusion/varnish:5.2.1-1-stretch .
+docker build --build-arg version=${VARNISH_VERSION} -f Dockerfile.varnish -t docker.artifactory.futurenet.com/tjackson02/varnish:${VARNISH_VERSION} .
 
 
 echo "Building envoy containers ..."
-docker build --build-arg mode=edge -f Dockerfile.envoy -t warmfusion/evhl-edge:latest .
-docker build --build-arg mode=origin -f Dockerfile.envoy -t warmfusion/evhl-origin:latest .
+docker build --build-arg mode=edge -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evhl-edge:${IMAGE_TAG} .
+docker build --build-arg mode=origin -f Dockerfile.envoy -t docker.artifactory.futurenet.com/tjackson02/evhl-origin:${IMAGE_TAG} .
 
 echo "Building test-app container ..."
 cd  src/service
-docker build -t warmfusion/evhl-test-app:latest .
+docker build -t docker.artifactory.futurenet.com/tjackson02/evhl-test-app:${IMAGE_TAG} .
 cd -
+
+
+echo "Pushing containers..."
+
+docker push docker.artifactory.futurenet.com/tjackson02/varnish:${VARNISH_VERSION}
+docker push docker.artifactory.futurenet.com/tjackson02/evhl-edge:${IMAGE_TAG}
+docker push docker.artifactory.futurenet.com/tjackson02/evhl-origin:${IMAGE_TAG}
+docker push docker.artifactory.futurenet.com/tjackson02/evhl-test-app:${IMAGE_TAG}

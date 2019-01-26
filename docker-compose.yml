@@ -18,6 +18,18 @@ services:
           - ${PWD}/conf/edge/envoy:/etc/envoy
         depends_on:
             - uk-edge-varnish
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 20s
+                order: start-first
+            placement:
+                constraints:
+                    - node.role == {{ role }}
+            restart_policy:
+                condition: any
+
 
     uk-edge-varnish:
         restart: always
@@ -32,26 +44,17 @@ services:
           - ${PWD}/conf/edge/varnish:/etc/varnish
         depends_on:
             - uk-origin-envoy
-
-## us based edge cache
-## Emulating the Cloud based services out of the us
-
-    # us-edge-envoy:
-    #     ports:
-    #         - '1080:80'
-    #         - '1443:443'
-    #     restart: always
-    #     logging:
-    #         options:
-    #             max-size: 1g
-    #     image: envoyproxy/envoy:latest
-    # us-edge-varnish:
-    #     restart: always
-    #     logging:
-    #         options:
-    #             max-size: 1g
-    #     image: 'warmfusion/varnish:5.2.1-1-stretch'
-
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 20s
+                order: start-first
+            placement:
+                constraints:
+                    - node.role == {{ role }}
+            restart_policy:
+                condition: any
 
 ## uk based origin caches
 ## Emulating the resilient caches acting as origin caches
@@ -68,6 +71,17 @@ services:
           - ${PWD}/conf/origin/envoy:/etc/envoy
         depends_on:
             - uk-origin-varnish
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 20s
+                order: start-first
+            placement:
+                constraints:
+                    - node.role == {{ role }}
+            restart_policy:
+                condition: any
 
     uk-origin-varnish:
         restart: always
@@ -82,6 +96,17 @@ services:
           - ${PWD}/conf/origin/varnish:/etc/varnish
         depends_on:
             - uk-service
+        deploy:
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 20s
+                order: start-first
+            placement:
+                constraints:
+                    - node.role == {{ role }}
+            restart_policy:
+                condition: any
 
 ## uk based origin backend service
 ## Emulating the services delivering functionality
@@ -95,3 +120,14 @@ services:
         logging:
             options:
                 max-size: 1g
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 20s
+                order: stop-first
+            placement:
+                constraints:
+                    - node.role == {{ role }}
+            restart_policy:
+                condition: any
