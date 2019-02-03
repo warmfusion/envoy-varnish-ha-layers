@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-3.yaml
+    kompose.version: 1.17.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: uk-service
+  name: uk-service
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: uk-service
+    spec:
+      containers:
+      - image: docker.artifactory.futurenet.com/tjackson02/evha-test-app:master
+        name: uk-service
+        resources: {}
+      restartPolicy: Always
+status: {}
